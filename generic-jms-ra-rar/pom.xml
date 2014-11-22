@@ -15,7 +15,7 @@
         <dependency>
             <groupId>org.jboss.genericjms</groupId>
             <artifactId>generic-jms-ra-jar</artifactId>
-            <version>1.0.8.Final</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
