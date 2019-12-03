@@ -25,6 +25,7 @@ import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.Set;
 
+import javax.jms.Connection;
 import javax.jms.ConnectionMetaData;
 import javax.resource.ResourceException;
 import javax.resource.spi.ConnectionManager;
@@ -117,7 +118,7 @@ public class JmsManagedConnectionFactory implements ManagedConnectionFactory {
     /**
      * Match a set of connections from the pool
      */
-    public ManagedConnection matchManagedConnections(Set connectionSet, Subject subject, ConnectionRequestInfo info) throws ResourceException {
+    public ManagedConnection matchManagedConnections(@SuppressWarnings("rawtypes") Set connectionSet, Subject subject, ConnectionRequestInfo info) throws ResourceException {
         boolean trace = log.isTraceEnabled();
 
         // Get cred
@@ -129,7 +130,8 @@ public class JmsManagedConnectionFactory implements ManagedConnectionFactory {
 
         // Traverse the pooled connections and look for a match, return first
         // found
-        Iterator connections = connectionSet.iterator();
+        @SuppressWarnings("unchecked")
+		Iterator<Connection> connections = ((Set<Connection>) connectionSet).iterator();
 
         while (connections.hasNext()) {
             Object obj = connections.next();

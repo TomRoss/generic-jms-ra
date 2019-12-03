@@ -77,7 +77,7 @@ public class JmsCred {
         return super.toString() + "{ username=" + name + ", password=**** }";
     }
 
-    private static class GetCredentialAction implements PrivilegedAction {
+    private static class GetCredentialAction implements PrivilegedAction<PasswordCredential> {
         Subject subject;
         ManagedConnectionFactory mcf;
 
@@ -86,10 +86,10 @@ public class JmsCred {
             this.mcf = mcf;
         }
 
-        public Object run() {
-            Set creds = subject.getPrivateCredentials(PasswordCredential.class);
+        public PasswordCredential run() {
+            Set<PasswordCredential> creds = subject.getPrivateCredentials(PasswordCredential.class);
             PasswordCredential pwdc = null;
-            Iterator credentials = creds.iterator();
+            Iterator<PasswordCredential> credentials = creds.iterator();
             while (credentials.hasNext()) {
                 PasswordCredential curCred = (PasswordCredential) credentials.next();
                 if (curCred.getManagedConnectionFactory().equals(mcf)) {

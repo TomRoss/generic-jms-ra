@@ -21,6 +21,8 @@
  */
 package org.jboss.resource.adapter.jms;
 
+import javax.jms.Destination;
+import javax.jms.JMSContext;
 import javax.jms.Queue;
 import javax.jms.Topic;
 import javax.resource.ResourceException;
@@ -38,6 +40,8 @@ public class JmsMCFProperties implements java.io.Serializable {
 
     public static final String QUEUE_TYPE = Queue.class.getName();
     public static final String TOPIC_TYPE = Topic.class.getName();
+    public static final String AGNOSTIC_TYPE = Destination.class.getName();
+    public static final String JMS_CONTEXT_TYPE = JMSContext.class.getName();
 
     String userName;
     String password;
@@ -133,17 +137,21 @@ public class JmsMCFProperties implements java.io.Serializable {
             this.type = JmsConnectionFactory.QUEUE;
         else if (type.equals(TOPIC_TYPE))
             this.type = JmsConnectionFactory.TOPIC;
+        else if (type.equals(JMS_CONTEXT_TYPE))
+            this.type = JmsConnectionFactory.JMS_CONTEXT;
         else
             this.type = JmsConnectionFactory.AGNOSTIC;
     }
 
     public String getSessionDefaultType() {
-        if (type == JmsConnectionFactory.AGNOSTIC)
-            return "agnostic";
-        else if (type == JmsConnectionFactory.QUEUE)
+        if (type == JmsConnectionFactory.QUEUE)
             return QUEUE_TYPE;
-        else
+        else if (type == JmsConnectionFactory.TOPIC)
             return TOPIC_TYPE;
+        else if (type == JmsConnectionFactory.JMS_CONTEXT)
+        	return JMS_CONTEXT_TYPE;
+        else
+        	return AGNOSTIC_TYPE;
     }
 
     /**

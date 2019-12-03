@@ -74,7 +74,7 @@ public class JmsMapMessage extends JmsMessage implements MapMessage {
         return ((MapMessage) message).getLong(name);
     }
 
-    public Enumeration getMapNames() throws JMSException {
+    public Enumeration<?> getMapNames() throws JMSException {
         return ((MapMessage) message).getMapNames();
     }
 

@@ -34,6 +34,7 @@ import javax.jms.ConnectionMetaData;
  * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
  */
 public class JmsConnectionMetaData implements ConnectionMetaData {
+
     public String getJMSVersion() {
         return "2.0";
     }
@@ -62,11 +63,12 @@ public class JmsConnectionMetaData implements ConnectionMetaData {
         return 1;
     }
 
-    public Enumeration getJMSXPropertyNames() {
-        Vector vector = new Vector();
+	public Enumeration<?> getJMSXPropertyNames() {
+		Vector<String> vector = new Vector<>();
         vector.add("JMSXGroupID");
         vector.add("JMSXGroupSeq");
         vector.add("JMSXDeliveryCount");
         return vector.elements();
     }
+	
 }

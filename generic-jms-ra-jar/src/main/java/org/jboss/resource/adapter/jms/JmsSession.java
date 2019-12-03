@@ -86,12 +86,12 @@ public class JmsSession implements Session, QueueSession, TopicSession {
     /**
      * The message consumers
      */
-    private HashSet consumers = new HashSet();
+    private HashSet<MessageConsumer> consumers = new HashSet<>();
 
     /**
      * The message producers
      */
-    private HashSet producers = new HashSet();
+    private HashSet<MessageProducer> producers = new HashSet<>();
 
     /**
      * Whether trace is enabled
@@ -814,7 +814,7 @@ public class JmsSession implements Session, QueueSession, TopicSession {
             }
 
             synchronized (consumers) {
-                for (Iterator i = consumers.iterator(); i.hasNext(); ) {
+                for (Iterator<MessageConsumer> i = consumers.iterator(); i.hasNext(); ) {
                     JmsMessageConsumer consumer = (JmsMessageConsumer) i.next();
                     try {
                         consumer.closeConsumer();
@@ -826,7 +826,7 @@ public class JmsSession implements Session, QueueSession, TopicSession {
             }
 
             synchronized (producers) {
-                for (Iterator i = producers.iterator(); i.hasNext(); ) {
+                for (Iterator<MessageProducer> i = producers.iterator(); i.hasNext(); ) {
                     JmsMessageProducer producer = (JmsMessageProducer) i.next();
                     try {
                         producer.closeProducer();

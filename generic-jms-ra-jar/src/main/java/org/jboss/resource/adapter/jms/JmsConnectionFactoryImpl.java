@@ -51,6 +51,7 @@ import org.jboss.logging.Logger;
  * @author <a href="mailto:adrian@jboss.com">Adrian Brock</a>
  */
 public class JmsConnectionFactoryImpl implements JmsConnectionFactory, Referenceable {
+
     private static final long serialVersionUID = -5135366013101194277L;
 
     private static final Logger log = Logger.getLogger(JmsConnectionFactoryImpl.class);
@@ -129,8 +130,7 @@ public class JmsConnectionFactoryImpl implements JmsConnectionFactory, Reference
             } else {
                 throw e;
             }
-        }
-        finally {
+		} finally {
             if (session != null) {
                 session.close();
             }
@@ -209,34 +209,33 @@ public class JmsConnectionFactoryImpl implements JmsConnectionFactory, Reference
 
     // -- JMS 2.0
 
-
-    @Override
     public JMSContext createContext() {
         return createContext(null, null);
     }
 
-    @Override
     public JMSContext createContext(String userName, String password) {
         return createContext(userName, password, Session.AUTO_ACKNOWLEDGE);
     }
 
-    @Override
     public JMSContext createContext(int sessionMode) {
         return createContext(null, null, sessionMode);
     }
 
-    @Override
     public JMSContext createContext(String userName, String password, int sessionMode) {
         JmsSessionFactoryImpl s = new JmsSessionFactoryImpl(mcf, cm, AGNOSTIC);
         s.setUserName(userName);
         s.setPassword(password);
-
-        System.out.println("sessionMode = " + sessionMode);
-
         try {
             JmsSession session = s.allocateConnection(sessionMode == Session.SESSION_TRANSACTED, sessionMode, AGNOSTIC);
             return new GenericJmsContext(s, session);
         } catch (JMSException e) {
+			if (s != null) {
+				try {
+					s.close();
+				} catch (JMSException e2) {
+					// ignore by intention
+				}
+			}
             JMSException jmse = findRootJMSException(e);
             if (jmse instanceof JMSSecurityException) {
                 throw new JMSSecurityRuntimeException(jmse.getMessage());
@@ -245,4 +244,5 @@ public class JmsConnectionFactoryImpl implements JmsConnectionFactory, Reference
             }
         }
     }
+
 }

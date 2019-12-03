@@ -139,7 +139,7 @@ public class JmsMessage implements Message {
         return message.getObjectProperty(name);
     }
 
-    public Enumeration getPropertyNames() throws JMSException {
+	public Enumeration<?> getPropertyNames() throws JMSException {
         return message.getPropertyNames();
     }
 
@@ -237,24 +237,19 @@ public class JmsMessage implements Message {
 
     // -- JMS 2.0 API
 
-
-    @Override
     public long getJMSDeliveryTime() throws JMSException {
         return message.getJMSDeliveryTime();
     }
 
-    @Override
     public void setJMSDeliveryTime(long deliveryTime) throws JMSException {
         message.setJMSDeliveryTime(deliveryTime);
     }
 
-    @Override
     public <T> T getBody(Class<T> c) throws JMSException {
         return message.getBody(c);
     }
 
-    @Override
-    public boolean isBodyAssignableTo(Class c) throws JMSException {
+	public boolean isBodyAssignableTo(@SuppressWarnings("rawtypes") Class c) throws JMSException {
         return message.isBodyAssignableTo(c);
     }
 
@@ -272,4 +267,5 @@ public class JmsMessage implements Message {
     public String toString() {
         return message.toString();
     }
+
 }

@@ -56,7 +56,7 @@ public class JmsResourceAdapter implements ResourceAdapter {
     /**
      * The activations by activation spec
      */
-    private ConcurrentHashMap activations = new ConcurrentHashMap();
+    private ConcurrentHashMap<ActivationSpec, JmsActivation> activations = new ConcurrentHashMap<>();
 
     /**
      * Get the work manager
@@ -89,8 +89,8 @@ public class JmsResourceAdapter implements ResourceAdapter {
     }
 
     public void stop() {
-        for (Iterator i = activations.entrySet().iterator(); i.hasNext(); ) {
-            Map.Entry entry = (Map.Entry) i.next();
+        for (Iterator<Map.Entry<ActivationSpec, JmsActivation>> i = activations.entrySet().iterator(); i.hasNext(); ) {
+            Map.Entry<ActivationSpec, JmsActivation> entry = i.next();
             try {
                 JmsActivation activation = (JmsActivation) entry.getValue();
                 if (activation != null) {
